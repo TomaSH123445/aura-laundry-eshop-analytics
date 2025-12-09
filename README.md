@@ -1,4 +1,4 @@
-x# AURA Laundry – Shopify e-shop analytics (GA4 + Looker Studio)
+## AURA Laundry – Shopify e-shop analytics (GA4 + Looker Studio)
 
 End-to-end analytický projekt pro začínající e-shop s parfémy do praní na Shopify.
 
