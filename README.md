@@ -73,7 +73,7 @@ Dashboard je rozdělený do dvou hlavních stránek:
 
   Konverzní poměr = keyEvents:purchase / sessions
 
-#### 4.2.1 Globální funnel (horní graf)
+### 4.2.Globální funnel (horní graf)
 
 **Typ grafu:** svislý pruhový graf  
 **Cíl:** ukázat, kolik návštěvníků projde jednotlivými kroky nákupního procesu.
