@@ -75,7 +75,7 @@ Popis dashboardu: [`looker/dashboard_description.md`](looker/dashboard_descripti
 
 ---
 
-## 📊 (Plánovaná) funnel analýza
+## 📊 funnel analýza
 
 V další iteraci plánuji:
 
