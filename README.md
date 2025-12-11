@@ -87,6 +87,7 @@ CASE
   WHEN eventName = "purchase" THEN "4 - Purchase"
 END
 
+## BUDOUCNOST:
 - export GA4 dat do **BigQuery** a pokročilejší analýzy v SQL,
 - RFM segmentace zákazníků,
 - market basket / cross-sell analýzy (po rozšíření sortimentu),
