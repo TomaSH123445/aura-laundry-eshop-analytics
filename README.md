@@ -1,108 +1,91 @@
-## AURA Laundry – Shopify e-shop analytics (GA4 + Looker Studio)
+# AURA Laundry Perfumes – GA4 & Looker Studio Analytics MVP
 
-End-to-end analytický projekt pro začínající e-shop s parfémy do praní na Shopify.
-
-Cílem bylo:
-- nastavit spolehlivé měření v **GA4** včetně e-commerce eventů,
-- postavit jednoduchý, ale businessově užitečný **dashboard v Looker Studiu**,
-- umožnit majiteli sledovat cíl: **prodat 1000 ks** produktu.
+Reálný mini-projekt datové analytiky pro začínající e-shop s parfémovaným gelem na praní (Shopify).  
+Cíl: **bezplatně** a **co nejjednodušeji** nasadit měření (GA4) a postavit první dashboard v Looker Studiu – včetně jednoduché *funnel analýzy*.
 
 ---
 
-## 🔍 Kontext
+## 1. Kontext projektu
 
-Klient: malý e-shop s jedním produktem (parfémovaný gel do praní) na platformě **Shopify**.  
-Původní stav: bez GA4, bez reportingu, bez přehledu o tom, odkud přichází objednávky.
-
----
-
-## 🧠 Moje role a stack
-
-**Role:** data / web analytik – návrh měření, komunikace s vývojářem, dashboard.
-
-**Tech stack:**
-
-- **Google Analytics 4** – eventové a e-commerce měření
-- **Shopify + Google & YouTube app** – nasazení Google tagu
-- **Tag Assistant, DebugView** – debugging trackingu
-- **Looker Studio** – reporting a vizualizace
-- (future) **BigQuery + SQL** – pro další analýzy
+- Klient: malý e-shop s jedním produktem (AURA – parfémovaný gel na praní).
+- Platforma: **Shopify**, jazyk webu CZ.
+- Startovní situace:
+  - žádná GA4 property
+  - žádný přehled o chování uživatelů
+  - cílem je 1000 prodaných kusů v prvním období
+- Můj cíl (junior / trainee data analyst):
+  - získat **reálnou zkušenost** s implementací GA4 na e-shopu,
+  - naučit se pracovat s eventy z GA4 v **Looker Studiu**,
+  - připravit jednoduchý, ale použitelný **MVP reporting pro majitele e-shopu**.
 
 ---
 
-## 🛠 Postup
+## 2. Tech stack
 
-### 1. Implementace měření
+- **Google Analytics 4 (GA4)** – webová property + datový stream pro e-shop.
+- **Shopify** – implementace měření přes oficiální Google / GA4 integraci.
+- **Google Tag Assistant & DebugView** – ladění a validace eventů.
+- **Looker Studio** – vizualizace dat, výpočet metrik, funnel grafy.
 
-- založení GA4 property a web streamu,
-- analýza možností měření v prostředí Shopify (GTM vs. oficiální appka),
-- nasazení Google tagu přes **Google & YouTube app**,
-- ověření e-commerce eventů:
+> Pozn.: GTM byl připravený, ale finální e-commerce eventy (`purchase` atd.) jdou přes oficiální Shopify → GA4 integraci. Pro MVP analytics to je nejjednodušší a nejstabilnější varianta.
 
-  - `view_item`
+---
+
+## 3. GA4 eventy a datový model
+
+Základ tvoří standardní GA4 webová implementace:
+
+- automaticky měřené eventy: `page_view`, `session_start`, `scroll`, `click`, …
+- e-commerce eventy z Shopify:
   - `add_to_cart`
   - `begin_checkout`
   - `add_payment_info`
   - `purchase`
 
-- kontrola parametrů (`transaction_id`, `value`, `currency`, `items[]`) v **DebugView**,
-- ladění filtrů interního / developer trafficu, aby se testy nepletly s reálnými daty.
+V GA4 je `purchase` nastaven jako **klíčová událost (Key event)**.
 
-Více detailů: [`ga4/ga4_setup_notes.md`](ga4/ga4_setup_notes.md)
+### Kontrola implementace
 
-### 2. Dashboard v Looker Studiu
-
-Hlavní stránka reportu obsahuje:
-
-- **KPI řádek:**
-  - počet objednávek,
-  - počet prodaných kusů,
-  - celkové tržby,
-  - **AOV** (průměrná hodnota objednávky),
-  - % splnění cíle **1000 ks**.
-
-- **Návštěvnost v čase** (sessions, new users),
-- **Tabulka kanálů** (Default channel group):
-  - users, sessions, purchases, revenue, conversion rate,
-- **Tabulka návštěv podle dne**.
-
-Vlastní metriky:
-
-- `AOV = Revenue / Purchases`
-- `Goal_progress_1000 = Items_sold / 1000`
-
-Popis dashboardu: [`looker/dashboard_description.md`](looker/dashboard_description.md)
+1. **Tag Assistant** – ověřeno, že se na všech důležitých stránkách načítá GA4 tag.
+2. **DebugView v GA4** – kontrola, že:
+   - `purchase` se spouští na děkovací stránce,
+   - přichází měna, hodnota objednávky a položky,
+   - eventy mají správnou posloupnost (`add_to_cart` → `begin_checkout` → `add_payment_info` → `purchase`).
 
 ---
 
-## 📊 funnel analýza
+## 4. Dashboard v Looker Studiu
 
-V další iteraci plánuji:
+Dashboard je rozdělený do dvou hlavních stránek:
 
-- postavit mini funnel:
-  `view_item → add_to_cart → begin_checkout → add_payment_info → purchase`,
-- spočítat drop-off mezi kroky,
-- rozpadnout funnel podle kanálů (Organic, Referral, Shopping, Social),
-- navrhnout konkrétní UX / marketingové změny pro zvýšení konverze.
+### 4.1 Stránka 1 – Přehled MVP
 
----
+**KPI Scorecards:**
 
-## 📈 Learnings
+- **Počet objednávek**  
+  – metrika: Key event `purchase`.
+- **Prodáno kusů**  
+  – počet zakoupených položek (GA4 e-commerce metrika).
+- **Celkové tržby**  
+  – obrat z `purchase` eventů.
+- **Konverzní poměr (MVP)**  
+  – vlastní metrika v Looker Studiu, např.:
 
-Na projektu jsem se naučil:
+  Konverzní poměr = keyEvents:purchase / sessions
 
-- prakticky propojit **GA4 + Shopify + Looker Studio** v reálném prostředí,
-- debugovat měření (Tag Assistant, DebugView, filtry dat),
-- přemýšlet od **business cíle (1000 ks)** k metrikám a vizualizacím,
-- komunikovat zadání s vývojářem a kontrolovat implementaci na úrovni dat.
+#### 4.2.1 Globální funnel (horní graf)
 
-Detailní case study: [`docs/case-study.md`](docs/case-study.md)
+**Typ grafu:** svislý pruhový graf  
+**Cíl:** ukázat, kolik návštěvníků projde jednotlivými kroky nákupního procesu.
 
----
+**Použité pole `Funnel step` (vypočtená dimenze):**
 
-## 🔮 Future work
-
-Nápady na další rozšíření (viz [`future-work/roadmap.md`](future-work/roadmap.md)):
+CASE
+  WHEN eventName = "add_to_cart" THEN "1 - Add to cart"
+  WHEN eventName = "begin_checkout" THEN "2 - Begin checkout"
+  WHEN eventName = "add_payment_info" THEN "3 - Add payment info"
+  WHEN eventName = "purchase" THEN "4 - Purchase"
+END
 
 - export GA4 dat do **BigQuery** a pokročilejší analýzy v SQL,
 - RFM segmentace zákazníků,
