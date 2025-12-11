@@ -75,8 +75,9 @@ Dashboard je rozdělený do dvou hlavních stránek:
 
 ### 4.2. AURA funnel 
 
-**Typ grafu:** svislý pruhový graf  
-**Cíl:** ukázat, kolik návštěvníků projde jednotlivými kroky nákupního procesu.
+**Typ grafu:** 1) svislý pruhový graf, 2) 100% skládaný vodorovný pruhový graf
+**Cíl:** 1) ukázat, kolik návštěvníků projde jednotlivými kroky nákupního procesu, 
+2) ukázat, jak se návštěvníci z různých kanálů liší v průchodu funnelem
 
 **Použité pole `Funnel step` (vypočtená dimenze):**
 
@@ -87,7 +88,7 @@ CASE
   WHEN eventName = "purchase" THEN "4 - Purchase"
 END
 
-## BUDOUCNOST:
+## BUDOUCNOST PROJEKTU:
 - export GA4 dat do **BigQuery** a pokročilejší analýzy v SQL,
 - RFM segmentace zákazníků,
 - market basket / cross-sell analýzy (po rozšíření sortimentu),
